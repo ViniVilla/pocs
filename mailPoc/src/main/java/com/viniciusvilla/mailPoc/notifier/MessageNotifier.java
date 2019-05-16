@@ -1,12 +1,12 @@
-package com.viniciusvilla.mailPoc.service;
+package com.viniciusvilla.mailPoc.notifier;
 
 import com.viniciusvilla.mailPoc.domain.EmailMessage;
 import com.viniciusvilla.mailPoc.domain.Message;
 import com.viniciusvilla.mailPoc.events.EmailSenderEvent;
-import com.viniciusvilla.mailPoc.notifier.EmailNotifier;
+import com.viniciusvilla.mailPoc.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -14,19 +14,19 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class MessageService {
+public class MessageNotifier {
 
     private final String from;
 
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventMulticaster applicationEventMulticaster;
 
-    private final EmailNotifier emailNotifier;
+    private final EmailService emailService;
 
-    public MessageService(@Value("${FROM_EMAIL}") final String from,
-                          ApplicationEventPublisher applicationEventPublisher, EmailNotifier emailNotifier) {
+    public MessageNotifier(@Value("${FROM_EMAIL}") final String from,
+                           ApplicationEventMulticaster applicationEventMulticaster, EmailService emailService) {
         this.from = from;
-        this.applicationEventPublisher = applicationEventPublisher;
-        this.emailNotifier = emailNotifier;
+        this.applicationEventMulticaster = applicationEventMulticaster;
+        this.emailService = emailService;
     }
 
     public void send(Message message){
@@ -43,7 +43,7 @@ public class MessageService {
         emailMessage.setTemplate("mail/new");
         emailMessage.setTemplateModel(model);
 
-        applicationEventPublisher.publishEvent(new EmailSenderEvent(this,emailMessage));
+        applicationEventMulticaster.multicastEvent(new EmailSenderEvent(this,emailMessage));
     }
 
 }

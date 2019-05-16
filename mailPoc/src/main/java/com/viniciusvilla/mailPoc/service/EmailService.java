@@ -1,4 +1,4 @@
-package com.viniciusvilla.mailPoc.notifier;
+package com.viniciusvilla.mailPoc.service;
 
 import com.viniciusvilla.mailPoc.domain.EmailMessage;
 import com.viniciusvilla.mailPoc.events.EmailSenderEvent;
@@ -18,21 +18,20 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 @Slf4j
-public class EmailNotifier {
+public class EmailService {
 
     private final JavaMailSender mailSender;
 
     private final TemplateEngine templateEngine;
 
-    public EmailNotifier(
+    public EmailService(
                           JavaMailSender mailSender,
                           TemplateEngine templateEngine) {
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
     }
 
-    @Async
-    @EventListener
+    @EventListener()
     @Retryable(maxAttempts = 5,
                 backoff = @Backoff(delay = 1000, multiplier = 2))
     public void sendMessage(EmailSenderEvent ese) throws MessagingException, InterruptedException {
