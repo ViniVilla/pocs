@@ -3,8 +3,8 @@ server:
 
 spring:
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: localhost
+    port: 1025
     username: ${FROM_EMAIL}
     password: ${FROM_PASSWORD}
     properties:

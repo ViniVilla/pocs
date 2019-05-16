@@ -2,6 +2,9 @@ spring:
   mail:
     host: localhost
     port: 8025
+  profiles:
+    active:
+      - test
 
 config:
   mail:
