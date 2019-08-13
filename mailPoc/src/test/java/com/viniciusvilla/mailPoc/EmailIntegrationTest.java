@@ -27,11 +27,13 @@ public class EmailIntegrationTest {
     @LocalServerPort
     private Integer port;
 
-    @Autowired
-    protected GreenMail greenMail;
+    private final GreenMail greenMail;
 
-    public EmailIntegrationTest(@Value("${FROM_EMAIL}") final String from) {
+    @Autowired
+    public EmailIntegrationTest(@Value("${FROM_EMAIL}") final String from,
+                                GreenMail greenMail) {
         this.from = from;
+        this.greenMail = greenMail;
     }
 
     @BeforeEach
