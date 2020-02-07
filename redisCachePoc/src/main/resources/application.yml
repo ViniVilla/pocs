@@ -1,0 +1,8 @@
+logging:
+  level:
+    root: DEBUG
+
+spring:
+  cache:
+    redis:
+      time-to-live: 604800000
